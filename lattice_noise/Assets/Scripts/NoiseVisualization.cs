@@ -42,7 +42,7 @@ public class NoiseVisualization : Visualization
     }
 
     protected override void UpdateVisualization(NativeArray<float3x4>positions, int resolution, JobHandle handle) {
-        Job<Lattice1D>.ScheduleParallel(positions, noise, seed, domain, resolution, handle).Complete();
+        Job<Lattice2D>.ScheduleParallel(positions, noise, seed, domain, resolution, handle).Complete();
         
        noiseBuffer.SetData(noise.Reinterpret<float>(4 * 4));
         
