@@ -3,7 +3,9 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+
 using static Unity.Mathematics.math;
+using static Noise;
 
 
 public class NoiseVisualization : Visualization
@@ -17,14 +19,14 @@ public class NoiseVisualization : Visualization
         scale = 8f
     };
 
-    NativeArray<uint4> noise;
+    NativeArray<float4> noise;
     
     ComputeBuffer noiseBuffer;
     
 
     protected override void EnableVisualization(int dataLength, MaterialPropertyBlock propertyBlock) {
         
-        noise = new NativeArray<uint4>(dataLength, Allocator.Persistent);
+        noise = new NativeArray<float4>(dataLength, Allocator.Persistent);
         
         noiseBuffer = new ComputeBuffer(dataLength * 4, 4);
         
@@ -40,8 +42,7 @@ public class NoiseVisualization : Visualization
     }
 
     protected override void UpdateVisualization(NativeArray<float3x4>positions, int resolution, JobHandle handle) {
-            
-        handle.Complete();
+        Job<Lattice1D>.ScheduleParallel(positions, noise, seed, domain, resolution, handle).Complete();
         
        noiseBuffer.SetData(noise.Reinterpret<float>(4 * 4));
         
