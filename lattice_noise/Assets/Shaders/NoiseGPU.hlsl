@@ -21,7 +21,7 @@ void ConfigureProcedural()
 float3 GetNoiseColor()
 {
     #if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
-        uint noise = _Noise[unity_InstanceID];
+        float noise = _Noise[unity_InstanceID];
         return noise < 0.0 ? float3(-noise, 0.0, 0.0) : noise;
     #else
         return 1.0;
