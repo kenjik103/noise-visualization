@@ -35,8 +35,12 @@ public static partial class Noise
             domainTRS = domainTRS.Matrix
         }.ScheduleParallel(positions.Length, resolution, dependency);
     }
-    public delegate JobHandle ScheduleDelegate(
-            NativeArray<float3x4> positions, NativeArray<float4> noise, int seed, float3x4 domainTRS, int resolution, JobHandle dependency
-            );
+    public delegate JobHandle ScheduleDelegate( 
+        NativeArray<float3x4> positions,
+        NativeArray<float4> noise,
+        int seed,
+        SpaceTRS domainTRS,
+        int resolution,
+        JobHandle dependency);
     
 }

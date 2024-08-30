@@ -341,8 +341,8 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: c976878df6e974ff38bf6d6e43da91a9, type: 2}
   mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   resolution: 16
-  instanceScale: 2
-  displacement: 0
+  instanceScale: 1
+  displacement: 0.158
   seed: 0
   domain:
     translation:
