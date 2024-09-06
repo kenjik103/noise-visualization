@@ -12,12 +12,27 @@ public class NoiseVisualization : Visualization
 {
     static int noiseId = Shader.PropertyToID("_Noise");
 
-    static ScheduleDelegate[] noiseJobs =
+    static ScheduleDelegate[,] noiseJobs =
     {
-        Job<Lattice1D<Value>>.ScheduleParallel,
-        Job<Lattice2D<Value>>.ScheduleParallel,
-        Job<Lattice3D<Value>>.ScheduleParallel
+        {
+            Job<Lattice1D<Perlin>>.ScheduleParallel,
+            Job<Lattice2D<Perlin>>.ScheduleParallel,
+            Job<Lattice3D<Perlin>>.ScheduleParallel
+        },
+        {
+            Job<Lattice1D<Value>>.ScheduleParallel,
+            Job<Lattice2D<Value>>.ScheduleParallel,
+            Job<Lattice3D<Value>>.ScheduleParallel
+        },
     };
+
+    public enum NoiseType
+    {
+        Perlin,
+        Value
+    };
+
+    [SerializeField] NoiseType type;
 
     [SerializeField] int seed;
 
@@ -26,8 +41,6 @@ public class NoiseVisualization : Visualization
     };
 
     [SerializeField, Range(1, 3)] int dimensions = 3;
-
-    
 
     NativeArray<float4> noise;
     
@@ -52,7 +65,7 @@ public class NoiseVisualization : Visualization
     }
 
     protected override void UpdateVisualization(NativeArray<float3x4>positions, int resolution, JobHandle handle) {
-        noiseJobs[dimensions - 1](positions, noise, seed, domain, resolution, handle).Complete();
+        noiseJobs[(int)type, dimensions - 1](positions, noise, seed, domain, resolution, handle).Complete();
         
        noiseBuffer.SetData(noise.Reinterpret<float>(4 * 4));
         
